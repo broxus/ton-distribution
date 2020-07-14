@@ -3,6 +3,7 @@ const airdrop = require('./../contracts/airdropContract');
 const {
   keys,
   ton,
+  getContractAddressByArgs,
 } = require('./utils');
 
 
@@ -14,9 +15,11 @@ function * zip(arr1, arr2, i = 0) {
 (async () => {
   await ton.setup();
   
+  const contractAddress = getContractAddressByArgs(process.argv);
+  
   const contract = new airdrop(
     ton,
-    '0:31700b76d72bc4285d013cc767401942f79508beaa0cf91c2ef41e846e627216',
+    contractAddress,
     keys,
   );
 

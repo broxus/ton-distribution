@@ -3,25 +3,30 @@ const airdrop = require('./../contracts/airdropContract');
 const {
   keys,
   ton,
+  getContractAddressByArgs,
 } = require('./utils');
 
 
 (async () => {
   await ton.setup();
-
+  
+  const contractAddress = getContractAddressByArgs(process.argv);
+  
   const contract = new airdrop(
     ton,
-    '0:31700b76d72bc4285d013cc767401942f79508beaa0cf91c2ef41e846e627216',
+    contractAddress,
     keys,
   );
   
   try {
-    const msg = await contract.refund({
+    await contract.refund({
       amount: 1000,
     });
 
-    console.log(msg);
+    console.log('Called successfully');
   } catch (e) {
     console.log(e);
   }
+  
+  process.exit(0);
 })();

@@ -1,0 +1,17 @@
+{
+	"name": "sergey",
+	"version": "1.0.0",
+	"description": "",
+	"main": "sergey/index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"dependencies": {
+		"minimist": "^1.2.5",
+		"stdio": "^2.1.1",
+		"ton-client-node-js": "^0.24.0",
+		"yargs": "^15.4.1"
+	},
+	"author": "",
+	"license": "ISC"
+}

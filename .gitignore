@@ -1,10 +1,4 @@
 node_modules/
 .idea/
-airdrop*
-*tar.xz
-*tar.gz
-*json
-*abi
-tonos-cli
-tvm_linker
-*zip
+tmp/
+keys.json

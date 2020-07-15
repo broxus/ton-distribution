@@ -5,9 +5,7 @@ const airdrop = require('./../contracts/airdropContract');
 const {
   keys,
   ton,
-  REFUND_DESTINATION,
-  ADDRESSES,
-  AMOUNTS,
+  constructorParams,
 } = require('./utils');
 
 
@@ -16,11 +14,7 @@ const {
 
   const contractAddress = (await ton.contracts.createDeployMessage({
     package: airdrop.package,
-    constructorParams: {
-      _refund_destination: REFUND_DESTINATION,
-      _addresses: ADDRESSES,
-      _amounts: AMOUNTS
-    },
+    constructorParams,
     initParams: {},
     keyPair: keys,
   })).address;

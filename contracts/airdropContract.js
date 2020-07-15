@@ -11,7 +11,8 @@ const abi = {
 			"inputs": [
 				{"name":"_refund_destination","type":"address"},
 				{"name":"_addresses","type":"address[]"},
-				{"name":"_amounts","type":"uint128[]"}
+				{"name":"_amounts","type":"uint128[]"},
+				{"name":"_refund_lock_duration","type":"uint256"}
 			],
 			"outputs": [
 			]
@@ -19,7 +20,6 @@ const abi = {
 		{
 			"name": "refund",
 			"inputs": [
-				{"name":"amount","type":"uint128"}
 			],
 			"outputs": [
 			]
@@ -65,11 +65,19 @@ const abi = {
 			]
 		},
 		{
-			"name": "get_nonce",
+			"name": "get_refund_lock_end_timestamp",
 			"inputs": [
 			],
 			"outputs": [
 				{"name":"value0","type":"uint256"}
+			]
+		},
+		{
+			"name": "get_current_balance",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"uint128"}
 			]
 		}
 	],
@@ -81,7 +89,7 @@ const abi = {
 
 const pkg = {
     abi,
-    imageBase64: 'te6ccgECJAEABncAAgE0BgEBAcACAgPPIAUDAQHeBAAD0CAAQdgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAIm/wD0pCAiwAGS9KDhiu1TWDD0oQkHAQr0pCD0oQgAAAIBIA0KAXL/fyHtRNAg10nCAY4s0//TP9MA1fQF+G3T/9Mf9ARZbwL4atMf9ARZbwL4a/hs+G5/+GH4Zvhj+GILAdSOUPQFcG1vAvhqcG1vAvhrjQhgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE+Gxt+G1w+G5wAYBA9A7yvdcL//hicPhjcPhmf/hh4tMAAZ+BAgDXGCD5AVj4QvkQ8qje0z8BDABqjh74QyG5IJ8wIPgjgQPoqIIIG3dAoLnekvhj4IA08jTY0x8B+CO88rnTHwHwAfhHbpLyPN4CASAUDgIBYhMPAQ+3KNJDvhBboBAB5I6A3vhG8nNx+Gb6QNMf9ARZbwIB0x/0BFlvAgHRIG8QIm8QuvLgZCBvEMIA8uBk+AAh+Gog+Gsi+GxfA/hCyMv/+EPPCz/4Rs8LAMj4TQH0APhO+EpvIvhLbyL4TF5gzxHL/8sf9ADLH/QAzsntVH/4ZxEBbO1E0CDXScIBjizT/9M/0wDV9AX4bdP/0x/0BFlvAvhq0x/0BFlvAvhr+Gz4bn/4Yfhm+GP4YhIApo5Q9AVwbW8C+GpwbW8C+GuNCGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAT4bG34bXD4bnABgED0DvK91wv/+GJw+GNw+GZ/+GHiAbm37xih/hBbo4v7UTQ0//TP9MA1fQF+G3T/9Mf9ARZbwL4atMf9ARZbwL4a/hs+G5/+GH4Zvhj+GLe03/R+AD4ACD4TH/Iz4WAygBzz0DOAfoCgGvPQMlz+wAwwP+AeAgEgHBUCASAZFgIBSBgXAd20iu5YfCC3Rxf2omhp/+mf6YBq+gL8Nun/6Y/6Aiy3gXw1aY/6Aiy3gXw1/DZ8Nz/8MPwzfDH8MW9o/CdkRe4AAAAAAAAAAAAAAAAIZ4tBCBqK7lhBCEAAAABY5GWPkWeF/4DnwOeJ5Lj9gBhgf8AeAdu08q/ffCC3Rxf2omhp/+mf6YBq+gL8Nun/6Y/6Aiy3gXw1aY/6Aiy3gXw1/DZ8Nz/8MPwzfDH8MW9o/CZkRe4AAAAAAAAAAAAAAAAIZ4tBCBjyr99BCEAAAABY5GWPkWeLAOfA54nkuP2AGGB/wB4CAWYbGgH8s982mvhBbo4v7UTQ0//TP9MA1fQF+G3T/9Mf9ARZbwL4atMf9ARZbwL4a/hs+G5/+GH4Zvhj+GLe0//RIPhNgQEA9A6T1woAkXDiMciL3AAAAAAAAAAAAAAAABDPFoIQJ982moIQgAAAALHIyx8izwoAAc+BzxPJcfsAMMD/HgHkskep7PhBbo4v7UTQ0//TP9MA1fQF+G3T/9Mf9ARZbwL4atMf9ARZbwL4a/hs+G5/+GH4Zvhj+GLe0fhKyIvcAAAAAAAAAAAAAAAAEM8WghAkR6nsghCAAAAAscjLHyJvIgLLH/QAAc+BzxPJcfsAMMD/HgIBIB8dAeW5gWHonwgt0cX9qJoaf/pn+mAavoC/Dbp/+mP+gIst4F8NWmP+gIst4F8Nfw2fDc//DD8M3wx/DFvaPwl5EXuAAAAAAAAAAAAAAAACGeLQQgOBYeiQQhAAAAAWORlj5E3kQFlj/oAAOfA54nkuP2AGGB/wHgByjjP4QsjL//hDzws/+EbPCwDI+E0B9AD4TvhKbyL4S28i+ExeYM8Ry//LH/QAyx/0AM7J7VTef/hnAgFiIyABjLKJoKb4QW6OL+1E0NP/0z/TANX0Bfht0//TH/QEWW8C+GrTH/QEWW8C+Gv4bPhuf/hh+Gb4Y/hi3tH4APgAcJYg+EpvELkhAf6OVCD4TYEBAPQOk9cKAJFw4nC6jj/4TSEBf8jKAFmBAQD0Q/htIPhLbxGAIPQO8rLXC38h+EpvEYAg9A7ysn/Iz4WAygBzz0DOAfoCgGvPQMlz+wDepOgw+ELIy//4Q88LP/hGzwsAyPhNAfQA+E74Sm8i+EtvIvhMXmDPEcv/IgAeyx/0AMsf9ADOye1Uf/hnAHLZcCLQ1gIx0gAw3CHHAJLyO+Ah1w0fkvI84VMRkvI74cEDIoIQ/////byxkvI84AHwAfhHbpLyPN4=',
+    imageBase64: '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',
 };
 
 class AirdropContract {
@@ -103,6 +111,7 @@ class AirdropContract {
      * @param {string} constructorParams._refund_destination (address)
      * @param {string[]} constructorParams._addresses (address[])
      * @param {uint128[]} constructorParams._amounts
+     * @param {string} constructorParams._refund_lock_duration (uint256)
      */
     async deploy(constructorParams) {
         if (!this.keys) {
@@ -149,19 +158,15 @@ class AirdropContract {
     }
 
     /**
-     * @param {object} params
-     * @param {uint128} params.amount
      */
-    refund(params) {
-        return this.run('refund', params);
+    refund() {
+        return this.run('refund', {});
     }
 
     /**
-     * @param {object} params
-     * @param {uint128} params.amount
      */
-    refundLocal(params) {
-        return this.runLocal('refund', params);
+    refundLocal() {
+        return this.runLocal('refund', {});
     }
 
     /**
@@ -261,23 +266,43 @@ class AirdropContract {
     }
 
     /**
-     * @typedef AirdropContract_get_nonce
+     * @typedef AirdropContract_get_refund_lock_end_timestamp
      * @type {object}
      * @property {string} value0  (uint256)
      */
 
     /**
-     * @return {Promise.<AirdropContract_get_nonce>}
+     * @return {Promise.<AirdropContract_get_refund_lock_end_timestamp>}
      */
-    get_nonce() {
-        return this.run('get_nonce', {});
+    get_refund_lock_end_timestamp() {
+        return this.run('get_refund_lock_end_timestamp', {});
     }
 
     /**
-     * @return {Promise.<AirdropContract_get_nonce>}
+     * @return {Promise.<AirdropContract_get_refund_lock_end_timestamp>}
      */
-    get_nonceLocal() {
-        return this.runLocal('get_nonce', {});
+    get_refund_lock_end_timestampLocal() {
+        return this.runLocal('get_refund_lock_end_timestamp', {});
+    }
+
+    /**
+     * @typedef AirdropContract_get_current_balance
+     * @type {object}
+     * @property {uint128} value0 
+     */
+
+    /**
+     * @return {Promise.<AirdropContract_get_current_balance>}
+     */
+    get_current_balance() {
+        return this.run('get_current_balance', {});
+    }
+
+    /**
+     * @return {Promise.<AirdropContract_get_current_balance>}
+     */
+    get_current_balanceLocal() {
+        return this.runLocal('get_current_balance', {});
     }
 
 }

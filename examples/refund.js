@@ -19,9 +19,7 @@ const {
   );
   
   try {
-    await contract.refund({
-      amount: 1000,
-    });
+    await contract.refund();
 
     console.log('Called successfully');
   } catch (e) {

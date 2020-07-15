@@ -13,14 +13,23 @@ contract Airdrop {
     mapping(uint => bool) distributed;
     uint256 refund_lock_duration_end;
 
-    modifier alwaysAccept {
+    uint total_amount = 0;
+
+//    modifier alwaysAccept {
+//        tvm.accept();
+//
+//        _;
+//    }
+
+    modifier refundLockPassed {
+        require(now > refund_lock_duration_end);
         tvm.accept();
 
         _;
     }
 
-    modifier refundLockPassed {
-        require(now > refund_lock_duration_end);
+    modifier balanceSufficient {
+        require(address(this).balance > total_amount);
         tvm.accept();
 
         _;
@@ -53,6 +62,10 @@ contract Airdrop {
         refund_destination = _refund_destination;
 
         refund_lock_duration_end = now + _refund_lock_duration;
+
+        for (uint i=0; i < amounts.length; i++) {
+            total_amount += amounts[i];
+        }
     }
 
     /**
@@ -68,7 +81,7 @@ contract Airdrop {
      *      In case there was an error at some height, function can be re-called
      *      Without sending tokens to the already processed receivers.
      */
-    function distribute() alwaysAccept public {
+    function distribute() balanceSufficient public {
         for (uint i=0; i < addresses.length; i++) {
             if (distributed[i] == false) {
                 distributed[i] = true;
@@ -99,5 +112,9 @@ contract Airdrop {
 
     function get_current_balance() external pure returns(uint128) {
         return uint128(address(this).balance);
+    }
+
+    function get_total_amount() external view returns(uint) {
+        return total_amount;
     }
 }

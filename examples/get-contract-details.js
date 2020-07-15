@@ -22,6 +22,14 @@ const {
   const { value0: contract_balance } = await contract.get_current_balanceLocal();
   console.log(`Contract balance: ${parseInt(contract_balance, 16)}`);
   
+  
+  // Total amount
+  const { value0: total_amount } = await contract.get_total_amountLocal();
+  console.log(`Total amount: ${parseInt(total_amount, 16)}`);
+  const balance_status_string = contract_balance > total_amount ? 'Sufficient' : 'Unsufficient';
+  
+  console.log(`\n${balance_status_string} balance\n`);
+  
   // Refund address
   const { value0: refund_address } = await contract.get_refund_destinationLocal();
   console.log(`Refund address: ${refund_address}`);

@@ -21,6 +21,8 @@ The contract source is available at [/contracts/airdrop.sol](./contracts/airdrop
 
 **Important**: Attributes are specified at the creation step and can't be changed later.
 
+Recommended size for addresses amount - **100 addresses**.
+
 ### Refund address
 
 This address will be used in case you need to return your TONs. The contract has the `refund(uint128 amount)` method which sends the specified amount to the refund address.

@@ -9,16 +9,6 @@ contract Airdrop {
     address refund_destination;
     mapping(uint => bool) distributed;
 
-    uint nonce;
-
-//    modifier checkNonce(uint _nonce) {
-//        require(nonce + 1 == nonce);
-//        nonce++;
-//        tvm.accept();
-//
-//        _;
-//    }
-
     modifier alwaysAccept {
         tvm.accept();
 
@@ -39,17 +29,11 @@ contract Airdrop {
         refund_destination = _refund_destination;
     }
 
-//    function refund(uint128 amount, uint _nonce) checkNonce(_nonce) public {
     function refund(uint128 amount) alwaysAccept public view {
-        tvm.accept();
-
         payable(refund_destination).transfer(amount, true, 3);
     }
 
-//    function distribute(uint _nonce) checkNonce(_nonce) public {
     function distribute() alwaysAccept public {
-        tvm.accept();
-
         for (uint i=0; i < addresses.length; i++) {
             if (distributed[i] == false) {
                 distributed[i] = true;
@@ -72,9 +56,5 @@ contract Airdrop {
 
     function get_distributed_status(uint i) external view returns(bool) {
         return distributed[i];
-    }
-
-    function get_nonce() external view returns(uint) {
-        return nonce;
     }
 }

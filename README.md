@@ -53,14 +53,17 @@ Be careful: running the script again will rewrite the previous keys. Do this if 
 
 ### 2. Specify the distribution details
 
-For now, you need to edit the `examples/utils.js` file.
+You need to edit the `config.yaml` file or create new file with YAML configuration. Basic layout is already provided in `config.yaml`:
 
+```yaml
+addresses_and_amounts_csv: 'validators.csv'
+refund_destination: '0:28861a9d4a9c9766e1129f7323e01ba0c98c33d5414c0036b8194282ff7abc5c'
+keys: 'keys.json'
+refund_lock_duration_in_seconds: 10000
+contractAddress: ''
 ```
-const REFUND_DESTINATION = '0:28861a9d4a9c9766e1129f7323e01ba0c98c33d5414c0036b8194282ff7abc5c';
-const ADDRESSES = ["0:28861a9d4a9c9766e1129f7323e01ba0c98c33d5414c0036b8194282ff7abc5c"];
-const AMOUNTS = [10];
-const REFUND_LOCK_DURATION_IN_SECONDS = 1;
-```
+
+All the scripts bellow supports the `--config` flag with the path to the configuration (`config.yaml` by default).
 
 ### 3. Get the feature contract address
 
@@ -87,15 +90,21 @@ Contract deployed at 0:be3cdd3cdda63901cdcd9ced1d3e50d7f1d8207b2711cfda4e4b48994
 
 ### 6. Verify the contract details
 
+**Important** At this step, specify the contract address at the `contractAddress` field at configuration file.
+
 You can verify that the attributes are correct by calling the list of getter functions in contract. The script bellow just automates this process.
 
 ```
-$ node examples/get-contract-details.js 0:abcc5b98d5fb583722fd8504cc40e33032ac22c917e4296e9c3f7c3d
-Contract balance: 123123
+$ node examples/get-contract-details.js
+Contract balance: 69361999
+Total amount: 100
+
+Sufficient balance
+
 Refund address: 0:28861a9d4a9c9766e1129f7323e01ba0c98c33d5414c0036b8194282ff7abc5c
-Refund lock ends at: Wed Jul 15 2020 16:49:19 GMT+0300 (Moscow Standard Time)
+Refund lock ends at: Wed Jul 15 2020 23:49:13 GMT+0300 (Moscow Standard Time)
 List of receivers and amounts with distribution status:
-false '0:28861a9d4a9c9766e1129f7323e01ba0c98c33d5414c0036b8194282ff7abc5c' 10
+0 false '0:28861a9d4a9c9766e1129f7323e01ba0c98c33d5414c0036b8194282ff7abc5c' 100
 ```
 
 ### 7. Send the TONs to the contract
@@ -104,10 +113,10 @@ After you make sure that everything is correct, you should send the necessary am
 
 ### 8. Run the distribution
 
-The important thing to now that each pair of (address, amount) will take part in distribution only once. So in any case, no address will receive the amount twice.
+The important thing that each pair of (address, amount) will take part in distribution only once. So in any case, no address will receive the amount twice.
 
 ```
-$ node examples/distribute.js 0:be3cdd3cdda63901cdcd9ced1d3e50d7f1d8207b2711cfda4e4b4899434c2a77
+$ node examples/distribute.js
 Called successfully
 ```
 
@@ -116,7 +125,7 @@ Called successfully
 If you need to refund some TONs you can use the following script:
 
 ```
-$ node examples/refund.js 0:af2957e14bcc5b9722fd8504cc40e33032ac22c917e4296e9c3f7c3d
+$ node examples/refund.js
 Called successfully
 ```
 

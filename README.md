@@ -65,6 +65,17 @@ contractAddress: ''
 
 All the scripts bellow supports the `--config` flag with the path to the configuration (`config.yaml` by default).
 
+#### 2.1 CSV format
+
+The csv file should include 2 columns: first one is raw addresses and the second one is amount in nanograms. Also, there should be no header line:
+
+```
+0:28861a9d4a9c9766e1129f7323e01ba0c98c33d5414c0036b8194282ff7abc5c,100
+0:28861a9d4a9c9766e1129f7323e01ba0c98c33d5414c0036b8194282ff7abc5c,123
+0:28861a9d4a9c9766e1129f7323e01ba0c98c33d5414c0036b8194282ff7abc5c,1000000
+0:28861a9d4a9c9766e1129f7323e01ba0c98c33d5414c0036b8194282ff7abc5c,10000000000
+```
+
 ### 3. Get the feature contract address
 
 ```

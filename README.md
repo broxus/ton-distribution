@@ -25,7 +25,7 @@ Recommended size for addresses amount - **100 addresses**.
 
 ### Refund address
 
-This address will be used in case you need to return your TONs. The contract has the `refund(uint128 amount)` method which sends the specified amount to the refund address.
+This address will be used in case you need to return your TONs. The contract has the `refund()` method which refunds all contract's balance to the refund address.
 
 ### Refund lock duration
 

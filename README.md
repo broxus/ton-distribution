@@ -17,6 +17,7 @@ The contract source is available at [/contracts/airdrop.sol](./contracts/airdrop
 - Refund address
 - List of amounts
 - List of receivers
+- Refund lock duration in seconds
 
 **Important**: Attributes are specified at the creation step and can't be changed later.
 
@@ -24,6 +25,9 @@ The contract source is available at [/contracts/airdrop.sol](./contracts/airdrop
 
 This address will be used in case you need to return your TONs. The contract has the `refund(uint128 amount)` method which sends the specified amount to the refund address.
 
+### Refund lock duration
+
+This parameters describes the amount of seconds that should pass since the contract creation. Only after that refund function can be executed.
 
 ## Pipeline description
 
@@ -53,6 +57,7 @@ For now, you need to edit the `examples/utils.js` file.
 const REFUND_DESTINATION = '0:28861a9d4a9c9766e1129f7323e01ba0c98c33d5414c0036b8194282ff7abc5c';
 const ADDRESSES = ["0:28861a9d4a9c9766e1129f7323e01ba0c98c33d5414c0036b8194282ff7abc5c"];
 const AMOUNTS = [10];
+const REFUND_LOCK_DURATION_IN_SECONDS = 1;
 ```
 
 ### 3. Get the feature contract address
@@ -83,11 +88,12 @@ Contract deployed at 0:be3cdd3cdda63901cdcd9ced1d3e50d7f1d8207b2711cfda4e4b48994
 You can verify that the attributes are correct by calling the list of getter functions in contract. The script bellow just automates this process.
 
 ```
-$ node examples/get-contract-details.js 0:be3cdd3cdda63901cdcd9ced1d3e50d7f1d8207b2711cfda4e4b4899434c2a77
-Refund address:
-0:50600a342eeae4c566e51447396b1871df3e9a16aab90009d85a16bf99408a69
-List of receivers and amounts:
-0:50600a342eeae4c566e51447396b1871df3e9a16aab90009d85a16bf99408a69 112233
+$ node examples/get-contract-details.js 0:abcc5b98d5fb583722fd8504cc40e33032ac22c917e4296e9c3f7c3d
+Contract balance: 123123
+Refund address: 0:28861a9d4a9c9766e1129f7323e01ba0c98c33d5414c0036b8194282ff7abc5c
+Refund lock ends at: Wed Jul 15 2020 16:49:19 GMT+0300 (Moscow Standard Time)
+List of receivers and amounts with distribution status:
+false '0:28861a9d4a9c9766e1129f7323e01ba0c98c33d5414c0036b8194282ff7abc5c' 10
 ```
 
 ### 7. Send the TONs to the contract
@@ -107,15 +113,10 @@ Called successfully
 
 If you need to refund some TONs you can use the following script:
 
-
-Edit the `examples/refund.js` to specify the amount:
-
-```javascript
-const msg = await contract.refund({
-  amount: 1000, // here, nanograms
-});
 ```
-
+$ node examples/refund.js 0:af2957e14bcc5b9722fd8504cc40e33032ac22c917e4296e9c3f7c3d
+Called successfully
+```
 
 ## Testing
 

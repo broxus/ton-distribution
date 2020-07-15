@@ -26,7 +26,8 @@ const {
   // Total amount
   const { value0: total_amount } = await contract.get_total_amountLocal();
   console.log(`Total amount: ${parseInt(total_amount, 16)}`);
-  const balance_status_string = contract_balance > total_amount ? 'Sufficient' : 'Unsufficient';
+  
+  const balance_status_string = parseInt(contract_balance, 16) > parseInt(total_amount, 16) ? 'Sufficient' : 'Unsufficient';
   
   console.log(`\n${balance_status_string} balance\n`);
   
@@ -55,7 +56,7 @@ const {
   
   console.log('List of receivers and amounts with distribution status:');
   addresses.map((address, address_index) => {
-    console.log(distributedStatus[address_index], address, parseInt(amounts[address_index], 16));
+    console.log(address_index, distributedStatus[address_index], address, parseInt(amounts[address_index], 16));
   });
   
   process.exit(0);

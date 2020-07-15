@@ -1,21 +1,20 @@
 const airdrop = require('./../contracts/airdropContract');
 
 const {
-  keys,
+  config,
   ton,
-  getContractAddressByArgs,
+  checkContractAddress,
 } = require('./utils');
 
+checkContractAddress(config.contractAddress);
 
 (async () => {
   await ton.setup();
   
-  const contractAddress = getContractAddressByArgs(process.argv);
-  
   const contract = new airdrop(
     ton,
-    contractAddress,
-    keys,
+    config.contractAddress,
+    config.keys,
   );
   
   try {

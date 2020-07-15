@@ -1,9 +1,8 @@
 const airdrop = require('./../contracts/airdropContract');
 
 const {
-  keys,
   ton,
-  constructorParams,
+  config,
 } = require('./utils');
 
 
@@ -14,9 +13,9 @@ const {
   try {
     const message = (await ton.contracts.deploy({
       package: airdrop.package,
-      constructorParams,
+      constructorParams: config.constructorParams,
       initParams: {},
-      keyPair: keys,
+      keyPair: config.keys,
     }));
     
     console.log(`Contract deployed at ${message.address}`);

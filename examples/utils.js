@@ -1,6 +1,46 @@
 const { TONClient } = require('ton-client-node-js');
 const fs = require('fs');
+const { program } = require('commander');
+const yaml = require('js-yaml');
+const parse = require('csv-parse/lib/sync');
+const assert = require('assert');
 
+program
+  .option(
+    '-c, --config <config>',
+    'Path to the configuration YAML file',
+    'config.yaml'
+  );
+
+program.parse(process.argv);
+
+
+// Parse configuration
+const getConfig = () => {
+  // - Read config from the yaml
+  const fileContents = fs.readFileSync(program.config, 'utf8');
+  const data = yaml.safeLoad(fileContents);
+  
+  // - Parse csv
+  const records = parse(fs.readFileSync(data.addresses_and_amounts_csv));
+  
+  // - Parse keys
+  const keys = JSON.parse(fs.readFileSync(data.keys));
+  
+  return {
+    keys,
+    constructorParams: {
+      _refund_destination: data.refund_destination,
+      _refund_lock_duration: data.refund_lock_duration_in_seconds,
+      _addresses: records.map(i => i[0]),
+      _amounts: records.map(i => parseInt(i[1], 10)),
+    },
+    contractAddress: data.contractAddress,
+  }
+};
+
+
+// Configure TON client
 const ton = new TONClient();
 
 ton.config.setData({
@@ -9,34 +49,22 @@ ton.config.setData({
 });
 
 
-const keys = JSON.parse(fs.readFileSync('keys.json'));
-
-const getContractAddressByArgs = (argv) => {
-  if (argv.length !== 3) {
-    throw new Error('Wrong command, you should specify contract address');
+const checkContractAddress = (address) => {
+  try {
+    assert.notStrictEqual(
+      address,
+      '',
+      'You should specify contract address in the config file'
+    );
+  } catch (e) {
+    console.log(e.message);
+    
+    process.exit(1);
   }
-  
-  return argv[2];
 };
-
-
-const REFUND_DESTINATION = '0:28861a9d4a9c9766e1129f7323e01ba0c98c33d5414c0036b8194282ff7abc5c';
-const ADDRESSES = ["0:28861a9d4a9c9766e1129f7323e01ba0c98c33d5414c0036b8194282ff7abc5c"];
-const AMOUNTS = [10];
-const REFUND_LOCK_DURATION_IN_SECONDS = 1;
-
-
-const constructorParams = {
-  _refund_destination: REFUND_DESTINATION,
-  _addresses: ADDRESSES,
-  _amounts: AMOUNTS,
-  _refund_lock_duration: REFUND_LOCK_DURATION_IN_SECONDS,
-};
-
 
 module.exports = {
   ton,
-  keys,
-  getContractAddressByArgs,
-  constructorParams,
+  config: getConfig(),
+  checkContractAddress,
 };

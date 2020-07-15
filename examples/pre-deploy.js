@@ -3,9 +3,8 @@ const { TONAddressStringVariant } = require('./../node_modules/ton-client-js/dis
 const airdrop = require('./../contracts/airdropContract');
 
 const {
-  keys,
   ton,
-  constructorParams,
+  config,
 } = require('./utils');
 
 
@@ -14,9 +13,9 @@ const {
 
   const contractAddress = (await ton.contracts.createDeployMessage({
     package: airdrop.package,
-    constructorParams,
+    constructorParams: config.constructorParams,
     initParams: {},
-    keyPair: keys,
+    keyPair: config.keys,
   })).address;
   
   console.log(`Future address of the contract will be: ${contractAddress}`);

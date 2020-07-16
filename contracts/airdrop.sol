@@ -26,21 +26,21 @@ contract Airdrop {
     // 1 TON should be enough for any possible fees
     // The rest of the balance can always be refunded
     modifier balanceSufficient {
-        require(address(this).balance > total_amount + required_fee, 5);
+        require(address(this).balance > total_amount + required_fee, 105);
         tvm.accept();
 
         _;
     }
 
     modifier distributedStatus(bool status) {
-        require(distributed == status, 6);
+        require(distributed == status, 106);
         tvm.accept();
 
         _;
     }
 
     modifier refundLockPassedOrDistributionIsOver() {
-        require((distributed == true) || (now > refund_lock_duration_end), 7);
+        require((distributed == true) || (now > refund_lock_duration_end), 107);
         tvm.accept();
 
         _;
@@ -63,9 +63,9 @@ contract Airdrop {
         uint128[] _amounts,
         uint256 _refund_lock_duration
     ) public {
-        require(_amounts.length == _addresses.length, 1);
-        require((_addresses.length > 0) && (_addresses.length < 100), 2);
-        require((_refund_lock_duration <= 604800) && (_refund_lock_duration >= 3600), 3);
+        require(_amounts.length == _addresses.length, 101);
+        require((_addresses.length > 0) && (_addresses.length < 100), 102);
+        require((_refund_lock_duration <= 604800) && (_refund_lock_duration >= 3600), 103);
         tvm.accept();
 
         addresses = _addresses;

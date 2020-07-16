@@ -10,26 +10,37 @@ contract Airdrop {
     address[] addresses;
     uint128[] amounts;
     address refund_destination;
-    mapping(uint => bool) distributed;
     uint256 refund_lock_duration_end;
 
+    bool distributed = false;
     uint total_amount = 0;
+    uint required_fee = 1000000000;
 
-//    modifier alwaysAccept {
+//    modifier refundLockPassed {
+//        require(now > refund_lock_duration_end, 4);
 //        tvm.accept();
 //
 //        _;
 //    }
 
-    modifier refundLockPassed {
-        require(now > refund_lock_duration_end);
+    // 1 TON should be enough for any possible fees
+    // The rest of the balance can always be refunded
+    modifier balanceSufficient {
+        require(address(this).balance > total_amount + required_fee, 5);
         tvm.accept();
 
         _;
     }
 
-    modifier balanceSufficient {
-        require(address(this).balance > total_amount);
+    modifier distributedStatus(bool status) {
+        require(distributed == status, 6);
+        tvm.accept();
+
+        _;
+    }
+
+    modifier refundLockPassedOrDistributionIsOver() {
+        require((distributed == true) || (now > refund_lock_duration_end), 7);
         tvm.accept();
 
         _;
@@ -41,10 +52,10 @@ contract Airdrop {
      *      in constructor and can't be changed later.
      *
      * @param _refund_destination Receiver of the TONs in case of refund
-     * @param _addresses List of receivers for distribution
+     * @param _addresses List of receivers for distribution. No more than 100 addresses.
      * @param _amounts   List of amounts specified for each receiver from the _addresses
      * @param _refund_lock_duration The duration of the refund lock in seconds. No more
-     *      than 1 week = 604800 seconds. (fool tolerance)
+     *      than 1 week = 604800 seconds and no less than 1 hour = 3600 seconds. (fool tolerance)
      */
     constructor(
         address _refund_destination,
@@ -52,9 +63,9 @@ contract Airdrop {
         uint128[] _amounts,
         uint256 _refund_lock_duration
     ) public {
-        require(_amounts.length == _addresses.length);
-        require(_amounts.length > 0);
-        require(_refund_lock_duration <= 604800);
+        require(_amounts.length == _addresses.length, 1);
+        require((_addresses.length > 0) && (_addresses.length < 100), 2);
+        require((_refund_lock_duration <= 604800) && (_refund_lock_duration >= 3600), 3);
         tvm.accept();
 
         addresses = _addresses;
@@ -70,23 +81,22 @@ contract Airdrop {
 
     /**
      * @dev Sends all contract's balance to the refund_destination
-     *      Can be executed only after refund_lock_duration_end
+     *      Can be executed only after
+     *      1. Refund lock passed
+     *      2. Distribution finished
      */
-    function refund() refundLockPassed public view {
+//    function refund() refundLockPassed distributedStatus(true) public view {
+    function refund() refundLockPassedOrDistributionIsOver public view {
         payable(refund_destination).transfer(0, false, 128);
     }
 
     /**
      * @dev Distributes contract balance to the receivers from the addresses
-     *      In case there was an error at some height, function can be re-called
-     *      Without sending tokens to the already processed receivers.
      */
-    function distribute() balanceSufficient public {
+    function distribute() balanceSufficient distributedStatus(false) public {
+        distributed = true;
         for (uint i=0; i < addresses.length; i++) {
-            if (distributed[i] == false) {
-                distributed[i] = true;
-                payable(addresses[i]).transfer(amounts[i], false, 3);
-            }
+            payable(addresses[i]).transfer(amounts[i], false, 1);
         }
     }
 
@@ -102,8 +112,8 @@ contract Airdrop {
         return refund_destination;
     }
 
-    function get_distributed_status(uint i) external view returns(bool) {
-        return distributed[i];
+    function get_distributed_status() external view returns(bool) {
+        return distributed;
     }
 
     function get_refund_lock_end_timestamp() external view returns(uint256) {
@@ -114,7 +124,7 @@ contract Airdrop {
         return uint128(address(this).balance);
     }
 
-    function get_total_amount() external view returns(uint) {
-        return total_amount;
+    function get_required_amount() external view returns(uint) {
+        return total_amount + required_fee;
     }
 }

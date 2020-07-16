@@ -58,7 +58,6 @@ const abi = {
 		{
 			"name": "get_distributed_status",
 			"inputs": [
-				{"name":"i","type":"uint256"}
 			],
 			"outputs": [
 				{"name":"value0","type":"bool"}
@@ -81,7 +80,7 @@ const abi = {
 			]
 		},
 		{
-			"name": "get_total_amount",
+			"name": "get_required_amount",
 			"inputs": [
 			],
 			"outputs": [
@@ -97,7 +96,7 @@ const abi = {
 
 const pkg = {
     abi,
-    imageBase64: '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',
+    imageBase64: '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',
 };
 
 class AirdropContract {
@@ -256,21 +255,17 @@ class AirdropContract {
      */
 
     /**
-     * @param {object} params
-     * @param {string} params.i (uint256)
      * @return {Promise.<AirdropContract_get_distributed_status>}
      */
-    get_distributed_status(params) {
-        return this.run('get_distributed_status', params);
+    get_distributed_status() {
+        return this.run('get_distributed_status', {});
     }
 
     /**
-     * @param {object} params
-     * @param {string} params.i (uint256)
      * @return {Promise.<AirdropContract_get_distributed_status>}
      */
-    get_distributed_statusLocal(params) {
-        return this.runLocal('get_distributed_status', params);
+    get_distributed_statusLocal() {
+        return this.runLocal('get_distributed_status', {});
     }
 
     /**
@@ -314,23 +309,23 @@ class AirdropContract {
     }
 
     /**
-     * @typedef AirdropContract_get_total_amount
+     * @typedef AirdropContract_get_required_amount
      * @type {object}
      * @property {string} value0  (uint256)
      */
 
     /**
-     * @return {Promise.<AirdropContract_get_total_amount>}
+     * @return {Promise.<AirdropContract_get_required_amount>}
      */
-    get_total_amount() {
-        return this.run('get_total_amount', {});
+    get_required_amount() {
+        return this.run('get_required_amount', {});
     }
 
     /**
-     * @return {Promise.<AirdropContract_get_total_amount>}
+     * @return {Promise.<AirdropContract_get_required_amount>}
      */
-    get_total_amountLocal() {
-        return this.runLocal('get_total_amount', {});
+    get_required_amountLocal() {
+        return this.runLocal('get_required_amount', {});
     }
 
 }

@@ -33,7 +33,7 @@ contract Airdrop {
     }
 
     modifier distributedStatus(bool status) {
-        require(distributed == status, 106);
+        require(distributed == status, 108);
         tvm.accept();
 
         _;
@@ -63,6 +63,7 @@ contract Airdrop {
         uint128[] _amounts,
         uint256 _refund_lock_duration
     ) public {
+        require(msg.pubkey() == tvm.pubkey(), 106);
         require(_amounts.length == _addresses.length, 101);
         require((_addresses.length > 0) && (_addresses.length < 100), 102);
         require((_refund_lock_duration <= 604800) && (_refund_lock_duration >= 3600), 103);

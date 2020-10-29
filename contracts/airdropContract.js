@@ -159,8 +159,8 @@ class AirdropContract {
             functionName,
             abi,
             input,
-            keyPair: this.keys,
         });
+
         return result.output;
     }
 
@@ -211,7 +211,7 @@ class AirdropContract {
     /**
      * @typedef AirdropContract_get_amounts
      * @type {object}
-     * @property {uint128[]} value0 
+     * @property {uint128[]} value0
      */
 
     /**
@@ -251,7 +251,7 @@ class AirdropContract {
     /**
      * @typedef AirdropContract_get_distributed_status
      * @type {object}
-     * @property {bool} value0 
+     * @property {bool} value0
      */
 
     /**
@@ -291,7 +291,7 @@ class AirdropContract {
     /**
      * @typedef AirdropContract_get_current_balance
      * @type {object}
-     * @property {uint128} value0 
+     * @property {uint128} value0
      */
 
     /**

@@ -4,3 +4,4 @@ tmp/
 keys.json
 contracts/airdrop.abi.json
 contracts/airdrop.tvc
+airdrop-data/

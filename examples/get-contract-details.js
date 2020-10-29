@@ -1,11 +1,13 @@
 const airdrop = require('./../contracts/airdropContract');
 
 const {
-  config,
+  getConfig,
   ton,
   checkContractAddress,
 } = require('./utils');
 
+
+const config = getConfig(false);
 
 checkContractAddress(config.contractAddress);
 
@@ -26,7 +28,6 @@ checkContractAddress(config.contractAddress);
   // Contract balance
   const { value0: contract_balance } = await contract.get_current_balanceLocal();
   console.log(`Contract balance: ${parseInt(contract_balance, 16)}`);
-  
   
   // Required amount
   const { value0: required_amount } = await contract.get_required_amountLocal();

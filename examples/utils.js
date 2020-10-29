@@ -16,13 +16,20 @@ program.parse(process.argv);
 
 
 // Parse configuration
-const getConfig = () => {
-  // - Read config from the yaml
+// Specify includeRecords = true if you need csv data included
+const getConfig = (includeRecords = true) => {
   const fileContents = fs.readFileSync(program.config, 'utf8');
-  const data = yaml.safeLoad(fileContents);
   
-  // - Parse csv
-  const records = parse(fs.readFileSync(data.addresses_and_amounts_csv));
+  const data = yaml.safeLoad(fileContents);
+
+  // - Read config from the yaml
+  let records;
+  if (includeRecords) {
+    // - Parse csv
+    records = parse(fs.readFileSync(data.addresses_and_amounts_csv));
+  } else {
+    records = [];
+  }
   
   // - Parse keys
   const keys = JSON.parse(fs.readFileSync(data.keys));
@@ -65,6 +72,6 @@ const checkContractAddress = (address) => {
 
 module.exports = {
   ton,
-  config: getConfig(),
+  getConfig,
   checkContractAddress,
 };

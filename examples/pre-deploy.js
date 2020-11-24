@@ -4,9 +4,10 @@ const airdrop = require('./../contracts/airdropContract');
 
 const {
   ton,
-  config,
+  getConfig,
 } = require('./utils');
 
+const config = getConfig(false);
 
 (async () => {
   await ton.setup();

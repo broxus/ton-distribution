@@ -1,10 +1,12 @@
 const airdrop = require('./../contracts/airdropContract');
 
 const {
-  config,
+  getConfig,
   ton,
   checkContractAddress,
 } = require('./utils');
+
+const config = getConfig();
 
 checkContractAddress(config.contractAddress);
 

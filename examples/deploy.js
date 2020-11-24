@@ -2,9 +2,11 @@ const airdrop = require('./../contracts/airdropContract');
 
 const {
   ton,
-  config,
+  getConfig,
 } = require('./utils');
 
+const config = getConfig();
+// console.log(config.constructorParams);
 
 (async () => {
   await ton.setup();
@@ -17,11 +19,11 @@ const {
       initParams: {},
       keyPair: config.keys,
     }));
-    
+
     console.log(`Contract deployed at ${message.address}`);
   } catch (e) {
     console.log(e);
   }
-  
+
   process.exit(0);
 })();

@@ -1,5 +1,5 @@
-addresses_and_amounts_csv: 'validators.csv'
-refund_destination: '0:28861a9d4a9c9766e1129f7323e01ba0c98c33d5414c0036b8194282ff7abc5c'
+addresses_and_amounts_csv: 'airdrop-data/24_nov_payouts.csv'
+refund_destination: '0:a953230a06ead7ac373e0e8d33a3e855a7dfb2441ae0dc0b4881c70f7a1c6ed5'
 keys: 'keys.json'
-refund_lock_duration_in_seconds: 3600 # 1 hour
-contractAddress: '0:a6f390ef0b4744ab13893d6d396ffa0099a6485c227d0a42b48bb7590ac157d3'
+refund_lock_duration_in_seconds: 10000 # 1 hour
+contractAddress: '0:99af919e9733a1d650785cdb96233830d8ede7b8b20d6abbae7b8e67424c41c1'

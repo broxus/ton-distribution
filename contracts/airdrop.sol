@@ -6,6 +6,8 @@ pragma AbiHeader expire;
  * @title TONs distribution smart contract. Pretty close to the regular airdrops.
  */
 contract Airdrop {
+    uint16 static _randomNonce;
+
     address[] addresses;
     uint128[] amounts;
     address refund_destination;
@@ -54,7 +56,7 @@ contract Airdrop {
      * @param _addresses List of receivers for distribution. No more than 100 addresses.
      * @param _amounts   List of amounts specified for each receiver from the _addresses
      * @param _refund_lock_duration The duration of the refund lock in seconds. No more
-     *      than 1 week = 604800 seconds and no less than 1 hour = 3600 seconds. (fool tolerance)
+     *      than 1 week = 604800 seconds and no less than 2 minutes = 120 seconds. (fool tolerance)
      */
     constructor(
         address _refund_destination,
@@ -65,7 +67,7 @@ contract Airdrop {
         require(msg.pubkey() == tvm.pubkey(), 106);
         require(_amounts.length == _addresses.length, 101);
         require((_addresses.length > 0) && (_addresses.length < 100), 102);
-        require((_refund_lock_duration <= 604800) && (_refund_lock_duration >= 3600), 103);
+        require((_refund_lock_duration <= 604800) && (_refund_lock_duration >= 120), 103);
         tvm.accept();
 
         addresses = _addresses;

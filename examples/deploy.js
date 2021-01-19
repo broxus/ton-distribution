@@ -16,7 +16,9 @@ const config = getConfig();
     const message = (await ton.contracts.deploy({
       package: airdrop.package,
       constructorParams: config.constructorParams,
-      initParams: {},
+      initParams: {
+        _randomNonce: 0
+      },
       keyPair: config.keys,
     }));
 

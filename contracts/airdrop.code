@@ -59,18 +59,18 @@ THROWIFNOT 106
 ;; get member length
 ;; push identifier _amounts
 PUSH S1
-FIRST
+INDEX 0
 ;; get member length
 ;; push identifier _addresses
 PUSH S3
-FIRST
+INDEX 0
 ;; ==
 EQUAL
 THROWIFNOT 101
 ;; get member length
 ;; push identifier _addresses
 PUSH S2
-FIRST
+INDEX 0
 GTINT 0
 ;; short-circuiting &&
 DUP
@@ -79,7 +79,7 @@ PUSHCONT {
 	;; get member length
 	;; push identifier _addresses
 	PUSH S2
-	FIRST
+	INDEX 0
 	LESSINT 100
 }
 IF
@@ -95,7 +95,7 @@ PUSHCONT {
 	DROP
 	;; push identifier _refund_lock_duration
 	DUP
-	PUSHINT 3600
+	PUSHINT 120
 	;; >=
 	GEQ
 }
@@ -107,21 +107,21 @@ ACCEPT
 ;; push identifier _addresses
 PUSH S2
 ; colValue
-SETGLOB 10
+SETGLOB 11
 ; end colValue
 ; expValue
 ; end expValue
 ;; push identifier _amounts
 PUSH S1
 ; colValue
-SETGLOB 11
+SETGLOB 12
 ; end colValue
 ; expValue
 ; end expValue
 ;; push identifier _refund_destination
 PUSH S3
 ; colValue
-SETGLOB 12
+SETGLOB 13
 ; end colValue
 ; expValue
 ; end expValue
@@ -132,7 +132,7 @@ PUSH S1
 ;; +
 ADD
 ; colValue
-SETGLOB 13
+SETGLOB 14
 ; end colValue
 ; for
 PUSHINT 0
@@ -142,8 +142,8 @@ PUSHCONT {
 	DUP
 	;; get member length
 	;; push identifier amounts
-	GETGLOB 11
-	FIRST
+	GETGLOB 12
+	INDEX 0
 	;; <
 	LESS
 }
@@ -152,7 +152,7 @@ PUSHCONT {
 	;; push identifier i
 	DUP
 	;; push identifier amounts
-	GETGLOB 11
+	GETGLOB 12
 	INDEX 1
 	PUSHINT 32
 	DICTUGET
@@ -160,12 +160,12 @@ PUSHCONT {
 	PLDU 128
 	; expValue
 	;; fetch total_amount
-	GETGLOB 15
+	GETGLOB 16
 	; end expValue
 	SWAP
 	ADD
 	; colValue
-	SETGLOB 15
+	SETGLOB 16
 	; end colValue
 	;; ++
 	; expValue
@@ -196,7 +196,7 @@ IF
 ENDS
 ; modifier refundLockPassedOrDistributionIsOver
 ;; push identifier distributed
-GETGLOB 14
+GETGLOB 15
 TRUE
 ;; ==
 EQUAL
@@ -207,7 +207,7 @@ PUSHCONT {
 	;; push identifier now
 	NOW
 	;; push identifier refund_lock_duration_end
-	GETGLOB 13
+	GETGLOB 14
 	;; >
 	GREATER
 }
@@ -217,7 +217,7 @@ ACCEPT
 ; function refund
 ;; transfer()
 ;; push identifier refund_destination
-GETGLOB 12
+GETGLOB 13
 NEWC
 STSLICECONST x42_
 STSLICE
@@ -241,7 +241,7 @@ SETGLOB 7
 .type	refund_internal, @function
 ; modifier refundLockPassedOrDistributionIsOver
 ;; push identifier distributed
-GETGLOB 14
+GETGLOB 15
 TRUE
 ;; ==
 EQUAL
@@ -252,7 +252,7 @@ PUSHCONT {
 	;; push identifier now
 	NOW
 	;; push identifier refund_lock_duration_end
-	GETGLOB 13
+	GETGLOB 14
 	;; >
 	GREATER
 }
@@ -262,7 +262,7 @@ ACCEPT
 ; function refund
 ;; transfer()
 ;; push identifier refund_destination
-GETGLOB 12
+GETGLOB 13
 NEWC
 STSLICECONST x42_
 STSLICE
@@ -292,9 +292,9 @@ ENDS
 GETPARAM 7
 INDEX 0
 ;; push identifier total_amount
-GETGLOB 15
-;; push identifier required_fee
 GETGLOB 16
+;; push identifier required_fee
+GETGLOB 17
 ;; +
 ADD
 ;; >
@@ -304,7 +304,7 @@ ACCEPT
 ; modifier distributedStatus
 FALSE
 ;; push identifier distributed
-GETGLOB 14
+GETGLOB 15
 ;; push identifier status
 PUSH S1
 ;; ==
@@ -316,7 +316,7 @@ ACCEPT
 ; end expValue
 TRUE
 ; colValue
-SETGLOB 14
+SETGLOB 15
 ; end colValue
 ; for
 PUSHINT 0
@@ -326,8 +326,8 @@ PUSHCONT {
 	DUP
 	;; get member length
 	;; push identifier addresses
-	GETGLOB 10
-	FIRST
+	GETGLOB 11
+	INDEX 0
 	;; <
 	LESS
 }
@@ -337,7 +337,7 @@ PUSHCONT {
 	;; push identifier i
 	DUP
 	;; push identifier amounts
-	GETGLOB 11
+	GETGLOB 12
 	INDEX 1
 	PUSHINT 32
 	DICTUGET
@@ -347,7 +347,7 @@ PUSHCONT {
 	;; push identifier i
 	PUSH S1
 	;; push identifier addresses
-	GETGLOB 10
+	GETGLOB 11
 	INDEX 1
 	PUSHINT 32
 	DICTUGET
@@ -389,9 +389,9 @@ SETGLOB 7
 GETPARAM 7
 INDEX 0
 ;; push identifier total_amount
-GETGLOB 15
-;; push identifier required_fee
 GETGLOB 16
+;; push identifier required_fee
+GETGLOB 17
 ;; +
 ADD
 ;; >
@@ -401,7 +401,7 @@ ACCEPT
 ; modifier distributedStatus
 FALSE
 ;; push identifier distributed
-GETGLOB 14
+GETGLOB 15
 ;; push identifier status
 PUSH S1
 ;; ==
@@ -413,7 +413,7 @@ ACCEPT
 ; end expValue
 TRUE
 ; colValue
-SETGLOB 14
+SETGLOB 15
 ; end colValue
 ; for
 PUSHINT 0
@@ -423,8 +423,8 @@ PUSHCONT {
 	DUP
 	;; get member length
 	;; push identifier addresses
-	GETGLOB 10
-	FIRST
+	GETGLOB 11
+	INDEX 0
 	;; <
 	LESS
 }
@@ -434,7 +434,7 @@ PUSHCONT {
 	;; push identifier i
 	DUP
 	;; push identifier amounts
-	GETGLOB 11
+	GETGLOB 12
 	INDEX 1
 	PUSHINT 32
 	DICTUGET
@@ -444,7 +444,7 @@ PUSHCONT {
 	;; push identifier i
 	PUSH S1
 	;; push identifier addresses
-	GETGLOB 10
+	GETGLOB 11
 	INDEX 1
 	PUSHINT 32
 	DICTUGET
@@ -490,7 +490,7 @@ ENDS
 ; function get_addresses
 ;; return
 ;; push identifier addresses
-GETGLOB 10
+GETGLOB 11
 ;; emitting 1 value(s)
 PUSH S1
 EQINT -1
@@ -542,7 +542,7 @@ ENDS
 ; function get_amounts
 ;; return
 ;; push identifier amounts
-GETGLOB 11
+GETGLOB 12
 ;; emitting 1 value(s)
 PUSH S1
 EQINT -1
@@ -594,7 +594,7 @@ ENDS
 ; function get_refund_destination
 ;; return
 ;; push identifier refund_destination
-GETGLOB 12
+GETGLOB 13
 ;; emitting 1 value(s)
 PUSH S1
 EQINT -1
@@ -643,7 +643,7 @@ ENDS
 ; function get_distributed_status
 ;; return
 ;; push identifier distributed
-GETGLOB 14
+GETGLOB 15
 ;; emitting 1 value(s)
 PUSH S1
 EQINT -1
@@ -692,7 +692,7 @@ ENDS
 ; function get_refund_lock_end_timestamp
 ;; return
 ;; push identifier refund_lock_duration_end
-GETGLOB 13
+GETGLOB 14
 ;; emitting 1 value(s)
 PUSH S1
 EQINT -1
@@ -785,9 +785,9 @@ ENDS
 ; function get_required_amount
 ;; return
 ;; push identifier total_amount
-GETGLOB 15
-;; push identifier required_fee
 GETGLOB 16
+;; push identifier required_fee
+GETGLOB 17
 ;; +
 ADD
 ;; emitting 1 value(s)
@@ -834,20 +834,22 @@ STUR 64
 GETGLOB 6
 STUR 1
 NEWC
-GETGLOB 15
 GETGLOB 16
+GETGLOB 17
 XCHG s2
 STU 256
 STU 256
 GETGLOB 10
-UNTUPLE 2
 GETGLOB 11
 UNTUPLE 2
 GETGLOB 12
+UNTUPLE 2
 GETGLOB 13
 GETGLOB 14
-REVERSE 9, 0
+GETGLOB 15
+REVERSE 10, 0
 STBREF
+STU 16
 STU 32
 STDICT
 STU 32
@@ -868,24 +870,26 @@ LDU 1       ; pubkey [timestamp] constructor_flag memory
 LDREFRTOS
 LDU 256
 PLDU 256
+SETGLOB 17
 SETGLOB 16
-SETGLOB 15
-LDU 32
-LDDICT
-ROTREV
-PAIR
-SETGLOB 10
+LDU 16
 LDU 32
 LDDICT
 ROTREV
 PAIR
 SETGLOB 11
+LDU 32
+LDDICT
+ROTREV
+PAIR
+SETGLOB 12
 LDMSGADDR
 LDU 256
 PLDI 1
+SETGLOB 15
 SETGLOB 14
 SETGLOB 13
-SETGLOB 12
+SETGLOB 10
 TRUE
 SETGLOB 1   ; pubkey [timestamp] constructor_flag
 SETGLOB 6   ; pubkey [timestamp]
@@ -905,24 +909,26 @@ PUSHCONT {
 	LDREFRTOS
 	LDU 256
 	PLDU 256
+	SETGLOB 17
 	SETGLOB 16
-	SETGLOB 15
-	LDU 32
-	LDDICT
-	ROTREV
-	PAIR
-	SETGLOB 10
+	LDU 16
 	LDU 32
 	LDDICT
 	ROTREV
 	PAIR
 	SETGLOB 11
+	LDU 32
+	LDDICT
+	ROTREV
+	PAIR
+	SETGLOB 12
 	LDMSGADDR
 	LDU 256
 	PLDI 1
+	SETGLOB 15
 	SETGLOB 14
 	SETGLOB 13
-	SETGLOB 12
+	SETGLOB 10
 	TRUE
 	SETGLOB 1   ; pubkey [timestamp] constructor_flag
 	SETGLOB 6   ; pubkey [timestamp]
@@ -931,31 +937,44 @@ PUSHCONT {
 }
 PUSHCONT {
 	PLDDICT   ; D
+	; init _randomNonce
+	PUSHINT 1
+	PUSH S1
+	PUSHINT 64
+	DICTUGET
+	PUSHCONT {
+		PLDU 16
+	}
+	PUSHCONT {
+		PUSHINT 0
+	}
+	IFELSE
+	SETGLOB 10
 	; init addresses
 	PUSHINT 0
 	NEWDICT
 	PAIR
-	SETGLOB 10
+	SETGLOB 11
 	; init amounts
 	PUSHINT 0
 	NEWDICT
 	PAIR
-	SETGLOB 11
+	SETGLOB 12
 	; init refund_destination
 	PUSHSLICE x8000000000000000000000000000000000000000000000000000000000000000001_
-	SETGLOB 12
+	SETGLOB 13
 	; init refund_lock_duration_end
 	PUSHINT 0
-	SETGLOB 13
+	SETGLOB 14
 	; init distributed
 	PUSHINT 0
-	SETGLOB 14
+	SETGLOB 15
 	; init total_amount
 	PUSHINT 0
-	SETGLOB 15
+	SETGLOB 16
 	; init required_fee
 	PUSHINT 0
-	SETGLOB 16
+	SETGLOB 17
 	; set contract pubkey
 	PUSHINT 0
 	SWAP
@@ -972,13 +991,13 @@ PUSHCONT {
 	SETGLOB 1
 	;; init state var: distributed
 	FALSE
-	SETGLOB 14
+	SETGLOB 15
 	;; init state var: total_amount
 	PUSHINT 0
-	SETGLOB 15
+	SETGLOB 16
 	;; init state var: required_fee
 	PUSHINT 1000000000
-	SETGLOB 16
+	SETGLOB 17
 }
 IFELSE
 
@@ -1010,14 +1029,16 @@ PUSHINT 4294967293   ; funcId body' funcId<3 funcId 4294967293
 GREATER              ; funcId body' funcId<3 funcId>4294967293
 OR                   ; funcId body' funcId<3||funcId>4294967293
 PUSHCONT {
+	DROP2
 	THROW 60
 }
 IFJMP
-SWAP  ; body' funcId
+SWAP    ; body funcId
 CALL 1
 GETGLOB 7
 ISNULL
 PUSHCONT {
+	DROP
 	THROW 60
 }
 IF
@@ -1058,6 +1079,7 @@ PUSHINT 4294967293   ; funcId body' funcId<3 funcId 4294967293
 GREATER              ; funcId body' funcId<3 funcId>4294967293
 OR                   ; funcId body' funcId<3||funcId>4294967293
 PUSHCONT {
+	DROP2
 	THROW 60
 }
 IFJMP
@@ -1066,6 +1088,7 @@ CALL 1
 GETGLOB 7
 ISNULL
 PUSHCONT {
+	DROP
 	THROW 60
 }
 IF

@@ -7,7 +7,12 @@ const {
   getConfig,
 } = require('./utils');
 
-const config = getConfig(false);
+const config = getConfig(true);
+
+if (config.constructorParams._addresses.length > 99) {
+  console.error('99 target contracts max. Use `pre-deploy-tree.js` instead');
+  return
+}
 
 (async () => {
   await ton.setup();
@@ -16,7 +21,9 @@ const config = getConfig(false);
     const contractAddress = (await ton.contracts.createDeployMessage({
       package: airdrop.package,
       constructorParams: config.constructorParams,
-      initParams: {},
+      initParams: {
+        _randomNonce: 0
+      },
       keyPair: config.keys,
     })).address;
   
